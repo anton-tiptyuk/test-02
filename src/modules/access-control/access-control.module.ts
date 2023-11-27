@@ -15,6 +15,8 @@ import { TokenRequestService } from './token-request/token-request.service';
 import { IpRequestService } from './ip-request/ip-request.service';
 import { AccessControlService } from './access-control.service';
 
+import { AccessControlController } from './access-control.controller';
+
 @Module({
   imports: [
     DbModule,
@@ -30,5 +32,6 @@ import { AccessControlService } from './access-control.service';
     IpRequestService,
     AccessControlService,
   ],
+  controllers: [AccessControlController],
 })
 export class AccessControlModule {}
