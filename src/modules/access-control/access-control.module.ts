@@ -1,48 +1,34 @@
 import { Module } from '@nestjs/common';
-import { Connection } from 'mongoose';
+import { MongooseModule } from '@nestjs/mongoose';
 
-import { DATABASE_CONNECTION } from '../db/db-providers';
 import { DbModule } from '../db/db.module';
 
-import { TOKEN_MODEL, tokenSchema } from './token/token.schema';
-import { TokenService } from './token/token.service';
-
+import { Token, tokenSchema } from './token/token.schema';
 import {
-  TOKEN_REQUEST_MODEL,
+  TokenRequest,
   tokenRequestSchema,
 } from './token-request/token-request.schema';
-import { TokenRequestService } from './token-request/token-request.service';
+import { IpRequest, ipRequestSchema } from './ip-request/ip-request.schema';
 
-import {
-  IP_REQUEST_MODEL,
-  ipRequestSchema,
-} from './ip-request/ip-request.schema';
+import { TokenService } from './token/token.service';
+import { TokenRequestService } from './token-request/token-request.service';
 import { IpRequestService } from './ip-request/ip-request.service';
+import { AccessControlService } from './access-control.service';
 
 @Module({
-  imports: [DbModule],
+  imports: [
+    DbModule,
+    MongooseModule.forFeature([
+      { name: Token.name, schema: tokenSchema },
+      { name: TokenRequest.name, schema: tokenRequestSchema },
+      { name: IpRequest.name, schema: ipRequestSchema },
+    ]),
+  ],
   providers: [
-    {
-      provide: TOKEN_MODEL,
-      useFactory: (connection: Connection) =>
-        connection.model('Token', tokenSchema),
-      inject: [DATABASE_CONNECTION],
-    },
     TokenService,
-    {
-      provide: TOKEN_REQUEST_MODEL,
-      useFactory: (connection: Connection) =>
-        connection.model('TokenRequest', tokenRequestSchema),
-      inject: [DATABASE_CONNECTION],
-    },
     TokenRequestService,
-    {
-      provide: IP_REQUEST_MODEL,
-      useFactory: (connection: Connection) =>
-        connection.model('IpRequest', ipRequestSchema),
-      inject: [DATABASE_CONNECTION],
-    },
     IpRequestService,
+    AccessControlService,
   ],
 })
 export class AccessControlModule {}

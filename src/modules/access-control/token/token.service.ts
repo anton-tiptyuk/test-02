@@ -1,17 +1,17 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { TOKEN_MODEL } from './token.schema';
-import { Token } from './token.interface';
+import { Token } from './token.schema';
 
 @Injectable()
 export class TokenService {
   constructor(
-    @Inject(TOKEN_MODEL)
-    private readonly tokenModel: Model<Token>,
+    @InjectModel(Token.name)
+    private readonly model: Model<Token>,
   ) {}
 
   findByToken(token: string) {
-    return this.tokenModel.findOne<Token>({ token }).exec();
+    return this.model.findOne<Token>({ token }).exec();
   }
 }

@@ -1,13 +1,13 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { TOKEN_REQUEST_MODEL } from './token-request.schema';
-import { TokenRequest } from './token-request.interface';
+import { TokenRequest } from './token-request.schema';
 
 @Injectable()
 export class TokenRequestService {
   constructor(
-    @Inject(TOKEN_REQUEST_MODEL)
-    private readonly tokenRequestModel: Model<TokenRequest>,
+    @InjectModel(TokenRequest.name)
+    private readonly model: Model<TokenRequest>,
   ) {}
 }

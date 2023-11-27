@@ -1,8 +1,15 @@
-import * as mongoose from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
 
-export const TOKEN_REQUEST_MODEL = 'TOKEN_REQUEST_MODEL';
+@Schema()
+export class TokenRequest {
+  @Prop()
+  token: string;
 
-export const tokenRequestSchema = new mongoose.Schema({
-  token: String,
-  timestamp: Date,
-});
+  @Prop()
+  timestamp: Date;
+}
+
+export type TokenRequestDocument = HydratedDocument<TokenRequest>;
+
+export const tokenRequestSchema = SchemaFactory.createForClass(TokenRequest);

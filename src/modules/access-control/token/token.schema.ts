@@ -1,8 +1,15 @@
-import * as mongoose from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
 
-export const TOKEN_MODEL = 'TOKEN_MODEL';
+@Schema()
+export class Token {
+  @Prop()
+  token: string;
 
-export const tokenSchema = new mongoose.Schema({
-  token: String,
-  expiresAt: Date,
-});
+  @Prop()
+  expiresAt: Date;
+}
+
+export type TokenDocument = HydratedDocument<Token>;
+
+export const tokenSchema = SchemaFactory.createForClass(Token);

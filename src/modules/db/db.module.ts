@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 
-import { dbProviders } from './db-providers';
+import { config } from '@/common';
 
 @Module({
-  providers: [...dbProviders],
-  exports: [...dbProviders],
+  imports: [MongooseModule.forRoot(config.mongoUrl)],
+  exports: [MongooseModule],
 })
 export class DbModule {}

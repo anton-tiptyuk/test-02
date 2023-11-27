@@ -1,8 +1,15 @@
-import * as mongoose from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
 
-export const IP_REQUEST_MODEL = 'TOKEN_REQUEST_MODEL';
+@Schema()
+export class IpRequest {
+  @Prop()
+  ip: string;
 
-export const ipRequestSchema = new mongoose.Schema({
-  ip: String,
-  timestamp: Date,
-});
+  @Prop()
+  timestamp: Date;
+}
+
+export type IpRequestDocument = HydratedDocument<IpRequest>;
+
+export const ipRequestSchema = SchemaFactory.createForClass(IpRequest);
