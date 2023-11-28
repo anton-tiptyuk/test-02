@@ -3,11 +3,8 @@ import { HydratedDocument } from 'mongoose';
 
 @Schema()
 export class Token {
-  @Prop()
+  @Prop({ index: true })
   token: string;
-
-  @Prop()
-  expiresAt: Date;
 }
 
 export type TokenDocument = HydratedDocument<Token>;
