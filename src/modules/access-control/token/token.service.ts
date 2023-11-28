@@ -11,6 +11,10 @@ export class TokenService {
     private readonly model: Model<Token>,
   ) {}
 
+  clear() {
+    return this.model.deleteMany();
+  }
+
   findByToken(token: string) {
     return this.model.findOne<Token>({ token }).exec();
   }

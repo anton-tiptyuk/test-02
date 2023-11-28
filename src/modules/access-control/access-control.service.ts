@@ -13,6 +13,8 @@ export class AccessControlService {
   ) {}
 
   async seed() {
-    //
+    await this.ipRequestService.clear();
+    await this.tokenService.clear();
+    await this.tokenRequestService.clear();
   }
 }

@@ -10,4 +10,8 @@ export class TokenRequestService {
     @InjectModel(TokenRequest.name)
     private readonly model: Model<TokenRequest>,
   ) {}
+
+  clear() {
+    return this.model.deleteMany();
+  }
 }

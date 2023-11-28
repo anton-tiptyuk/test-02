@@ -10,4 +10,8 @@ export class IpRequestService {
     @InjectModel(IpRequest.name)
     private readonly model: Model<IpRequest>,
   ) {}
+
+  clear() {
+    return this.model.deleteMany();
+  }
 }
