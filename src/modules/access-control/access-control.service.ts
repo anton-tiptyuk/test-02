@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 
+import { AccessControlProvider } from '@/domain/access-control';
+
 import { IpRequestService } from './ip-request/ip-request.service';
 import { TokenService } from './token/token.service';
 import { TokenRequestService } from './token-request/token-request.service';
 
 @Injectable()
-export class AccessControlService {
+export class AccessControlService implements AccessControlProvider {
   constructor(
     private readonly ipRequestService: IpRequestService,
     private readonly tokenService: TokenService,
@@ -18,5 +20,10 @@ export class AccessControlService {
     await this.tokenRequestService.clear();
 
     await this.tokenService.seed();
+  }
+
+  async validateToken(token: string) {
+    const found = await this.tokenService.findByToken(token);
+    return !!found;
   }
 }

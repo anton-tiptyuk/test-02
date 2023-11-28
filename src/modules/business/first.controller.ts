@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { AuthGuard } from '@/domain/guards/auth-guard';
+import { AuthGuard } from '@/domain/guards';
 
 @ApiBearerAuth()
 @ApiTags('business')

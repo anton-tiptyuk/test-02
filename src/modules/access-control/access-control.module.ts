@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { ExistingProvider, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { DbModule } from '../db/db.module';
@@ -16,6 +16,12 @@ import { IpRequestService } from './ip-request/ip-request.service';
 import { AccessControlService } from './access-control.service';
 
 import { AccessControlController } from './access-control.controller';
+import { ACCESS_CONTROL_PROVIDER } from '@/domain/access-control';
+
+const acProviderAlias: ExistingProvider = {
+  provide: ACCESS_CONTROL_PROVIDER,
+  useExisting: AccessControlService,
+};
 
 @Module({
   imports: [
@@ -31,7 +37,9 @@ import { AccessControlController } from './access-control.controller';
     TokenRequestService,
     IpRequestService,
     AccessControlService,
+    acProviderAlias,
   ],
   controllers: [AccessControlController],
+  exports: [AccessControlService, acProviderAlias],
 })
 export class AccessControlModule {}
