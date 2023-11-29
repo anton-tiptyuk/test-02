@@ -26,6 +26,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^7.1.16",
     "dotenv": "^16.3.1",
+    "ioredis": "^5.3.2",
     "joi": "^17.11.0",
     "mongoose": "^8.0.1",
     "reflect-metadata": "^0.1.13",
