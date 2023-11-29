@@ -1,11 +1,11 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { AuthGuard } from '@/domain/guards';
+import { AuthGuard, RateLimitGuard } from '@/domain/guards';
 
 @ApiBearerAuth()
 @ApiTags('business')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RateLimitGuard)
 @Controller('business/first')
 export class FirstController {
   @Get('get-01-endpoint')
