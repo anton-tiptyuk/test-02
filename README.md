@@ -40,7 +40,7 @@ const ip =
   (request.headers['x-forwarded-for'] || [])[0] ||
   request.socket.remoteAddress;
 ```
-But I am not sure this is an ideal solution and as far as I understand in fact to be absolutely sure a thirdparty service should be used.
+But I am not sure this is an ideal solution and as far as I understand in fact to be absolutely sure a thirdparty service should be used. Also, I don't see no way of testing the version with proxy and `x-forwarded-for` for now, just got rid of that.
 
 
 ## Longread notes during progress (not important)

@@ -34,10 +34,7 @@ export class RateLimitGuard implements CanActivate {
         metadataTargets,
       ) || 1;
 
-    const ip =
-      (request.headers['x-forwarded-for'] || [])[0] ||
-      request.socket.remoteAddress;
-
+    const { ip } = request;
     const token: string = request['token'];
 
     const isForToken = !!token;
