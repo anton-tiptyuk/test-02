@@ -24,6 +24,7 @@ export class RedisService {
 
     this.redis = new Redis(url, { keyPrefix });
     this.redis.on('error', (err) => this.logger.error(err.message, err));
+
     this.redis.defineCommand(luaRateLimitCmd, {
       numberOfKeys: 1,
       lua: luaRateLimit,
@@ -31,16 +32,18 @@ export class RedisService {
   }
 
   private async cleanup() {
-    await this.redis.del(tokenKey);
+    const { keyPrefix } = config.redisOptions;
 
-    const ipKeys = await this.redis.keys(`${ipRateBaseKey}:*`);
-    if (ipKeys.length) {
-      await this.redis.del(ipKeys);
-    }
-    const tokenKeys = await this.redis.keys(`${tokenRateBaseKey}:*`);
-    if (tokenKeys.length) {
-      await this.redis.del(tokenKeys);
-    }
+    const delKeysLike = async (key: string) => {
+      const keys = await this.redis.keys(`${keyPrefix}${key}:*`);
+      if (keys.length) {
+        await this.redis.del(keys.map((key) => key.replace(keyPrefix, '')));
+      }
+    };
+
+    await this.redis.del(tokenKey);
+    await delKeysLike(ipRateBaseKey);
+    await delKeysLike(tokenRateBaseKey);
   }
 
   async seed(tokens: string[]) {
