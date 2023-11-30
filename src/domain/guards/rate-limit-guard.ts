@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-import { TooManyRequestsException } from '@/common';
+import { TooManyRequestsException, config } from '@/common';
 
 import {
   ACCESS_CONTROL_PROVIDER,
@@ -44,8 +44,15 @@ export class RateLimitGuard implements CanActivate {
       : this.accessControlProvider.validateRateLimitForIp(ip, weight));
 
     if (exceeded) {
+      const { rangeSeconds, maxRequestsIp, maxRequestsToken } =
+        config.rateLimit;
+
+      const limitationLemma = `${
+        isForToken ? maxRequestsToken : maxRequestsIp
+      } request points per ${Math.trunc(rangeSeconds / 60)} minutes`;
+
       throw new TooManyRequestsException(
-        `Rate Limit exceeded. Try after ${tryAfter.toISOString()}`,
+        `Rate Limit (${limitationLemma}) exceeded. This request costs ${weight} points. Try after ${tryAfter.toISOString()}`,
       );
     }
 
