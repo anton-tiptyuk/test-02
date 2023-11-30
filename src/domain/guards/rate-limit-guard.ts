@@ -43,11 +43,9 @@ export class RateLimitGuard implements CanActivate {
       ? this.accessControlProvider.validateRateLimitForToken(token, weight)
       : this.accessControlProvider.validateRateLimitForIp(ip, weight));
 
-    // 2do:
-    // format date
     if (exceeded) {
       throw new TooManyRequestsException(
-        `Rate Limit exceeded. Try after ${tryAfter}`,
+        `Rate Limit exceeded. Try after ${tryAfter.toISOString()}`,
       );
     }
 

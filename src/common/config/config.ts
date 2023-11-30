@@ -5,7 +5,11 @@ import {
   // DB
   REDIS_URL,
   REDIS_KEY_PREFIX,
-  MONGO_URL,
+
+  // rate limit
+  RATE_LIMIT_RANGE_SECONDS,
+  RATE_MAX_REQUESTS_IP,
+  RATE_MAX_REQUESTS_TOKEN,
 } from './schema';
 
 export class Config {
@@ -26,7 +30,11 @@ export class Config {
     };
   }
 
-  get mongoUrl() {
-    return this.getValue(MONGO_URL);
+  get rateLimit() {
+    return {
+      rangeSeconds: this.getValue<number>(RATE_LIMIT_RANGE_SECONDS),
+      maxRequestsIp: this.getValue<number>(RATE_MAX_REQUESTS_IP),
+      maxRequestsToken: this.getValue<number>(RATE_MAX_REQUESTS_TOKEN),
+    };
   }
 }

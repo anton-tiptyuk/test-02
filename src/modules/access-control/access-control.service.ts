@@ -5,41 +5,27 @@ import {
   RateLimitResult,
 } from '@/domain/access-control';
 
-import { IpRequestService } from './ip-request/ip-request.service';
-import { TokenService } from './token/token.service';
-import { TokenRequestService } from './token-request/token-request.service';
+import { RedisService } from '../redis/redis.service';
 
 @Injectable()
 export class AccessControlService implements AccessControlProvider {
-  constructor(
-    private readonly ipRequestService: IpRequestService,
-    private readonly tokenService: TokenService,
-    private readonly tokenRequestService: TokenRequestService,
-  ) {}
-  async seed() {
-    await this.ipRequestService.clear();
-    await this.tokenService.clear();
-    await this.tokenRequestService.clear();
-
-    await this.tokenService.seed();
+  constructor(private readonly redisService: RedisService) {}
+  seed(tokens: string[]) {
+    return this.redisService.seed(tokens);
   }
 
-  async validateToken(token: string) {
-    const found = await this.tokenService.findByToken(token);
-    return !!found;
+  validateToken(token: string) {
+    return this.redisService.validateToken(token);
   }
 
-  async validateRateLimitForIp(
-    ip: string,
-    weight: number,
-  ): Promise<RateLimitResult> {
-    return { exceeded: false };
+  validateRateLimitForIp(ip: string, weight: number): Promise<RateLimitResult> {
+    return this.redisService.checkRequestForIp(ip, weight);
   }
 
-  async validateRateLimitForToken(
+  validateRateLimitForToken(
     token: string,
     weight: number,
   ): Promise<RateLimitResult> {
-    return { exceeded: true, tryAfter: new Date() };
+    return this.redisService.checkRequestForToken(token, weight);
   }
 }
