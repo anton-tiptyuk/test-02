@@ -43,6 +43,14 @@ const ip =
 But I am not sure this is an ideal solution and as far as I understand in fact to be absolutely sure a thirdparty service should be used. Also, I don't see no way of testing the version with proxy and `x-forwarded-for` for now, just got rid of that.
 
 
+## About tests
+
+In fact the trickiest thing to test and something I had the most doubts about is that rate limiting LUA script. One thing - the edge cases in limiting. Another thing - making sure that `tryAfter` timestamps are correct.
+Since the subject to test is mostly the LUA script executed inside Redis, the test itself happened to be somewhat implicit.
+
+To run tests you can just execute `yarn test`. The tests would actually use the same Redis server defined in the `.env`. Also, the test are supposed to clean up the redis set they create afterall.
+
+
 ## Longread notes during progress (not important)
 
 ### First impressions.
@@ -81,3 +89,6 @@ Eventually bootstrapped ioredis within the project and wrote some ProofOfConcept
 Now it seems to me that I do not need that Mongo any more and in fact I plan to get rid of it moving the tokens to be stored within the Redis as well.
 
 Eventually got rid of Mongo and switched to using Redis only.
+
+After writing this readme I decided to come up with some tests. As always writing tests brought its benefit and I found a border case issue with detecting of that `tryAfter` timestamp.
+

@@ -19,8 +19,10 @@ if requestCount + weight <= maxRequests then
     return { 1, 0 }
 end
 
+local awaitedIndex = weight - maxRequests + requestCount - 1
+
 -- i thought of caching this but it does not seem to make sense
-local oldestEntry = redis.call('ZRANGE', keyName, weight-1, weight-1, 'WITHSCORES')
+local oldestEntry = redis.call('ZRANGE', keyName, awaitedIndex, awaitedIndex, 'WITHSCORES')
 
 return { 0, oldestEntry[2] + rangeSeconds + 1 }
 `;
